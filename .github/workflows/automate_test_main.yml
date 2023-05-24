@@ -3,10 +3,10 @@ name: Main Repository Workflow
 on:
   repository_dispatch:
     types:
-      - update_main_repository
+      - update_main_branch
 
 jobs:
-  build_and_test:
+  build_desdeo_and_update:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,11 +23,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # Add more steps here based on your build and test requirements
-
-      - name: Run additional tests
-        run: |
-          # Execute additional tests specific to the framework
+      # Add more steps here based on your build and test requirements for the DESDEO framework
 
       - name: Update Main Branch
         run: |
