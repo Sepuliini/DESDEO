@@ -1,34 +1,38 @@
-name: Run Tests on DESDEO Update
+name: Main Repository Workflow
 
 on:
-  workflow_run:
-    workflows:
-      - "Update DESDEO on push to desdeo-problem"
+  repository_dispatch:
     types:
-      - completed
+      - update_main_repository
 
 jobs:
-  run-tests:
+  build_and_test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out desdeo-problem repository
+      - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          repository: <your GitHub username>/desdeo-problem
-          token: ${{ secrets.GITHUB_TOKEN }}
-          ref: main
+          python-version: 3.9
 
-      - name: Run Tests
+      - name: Install dependencies
         run: |
-          # Add commands to run your tests here
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      - name: Update main branch if tests pass
-        if: success()
+      # Add more steps here based on your build and test requirements
+
+      - name: Run additional tests
         run: |
-          cd ..
+          # Execute additional tests specific to the framework
+
+      - name: Update Main Branch
+        run: |
+          git config --global user.name "Your Name"
+          git config --global user.email "your.email@example.com"
           git checkout main
-          git pull origin main
-          git merge --no-ff --no-commit <your GitHub username>/desdeo-problem
-          git commit -m "Merge branch '${{ github.event.workflow_run.head_branch }}' into main"
+          git merge "${{ github.head_ref }}"
           git push origin main
