@@ -1,0 +1,34 @@
+name: Run Tests on DESDEO Update
+
+on:
+  workflow_run:
+    workflows:
+      - "Update DESDEO on push to desdeo-problem"
+    types:
+      - completed
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out desdeo-problem repository
+        uses: actions/checkout@v2
+        with:
+          repository: <your GitHub username>/desdeo-problem
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: main
+
+      - name: Run Tests
+        run: |
+          # Add commands to run your tests here
+
+      - name: Update main branch if tests pass
+        if: success()
+        run: |
+          cd ..
+          git checkout main
+          git pull origin main
+          git merge --no-ff --no-commit <your GitHub username>/desdeo-problem
+          git commit -m "Merge branch '${{ github.event.workflow_run.head_branch }}' into main"
+          git push origin main
