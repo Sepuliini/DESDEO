@@ -1,5 +1,6 @@
-      name: DESDEO-main
-      
+name: DESDEO-main
+
+on: push
 #----------------------------------------------
 #       just a test file for now
 #----------------------------------------------
