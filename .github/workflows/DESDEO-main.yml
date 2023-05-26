@@ -1,8 +1,16 @@
 name: DESDEO-main
 
-on: push
-#----------------------------------------------
-#       just a test file for now
-#----------------------------------------------
+on:
+  repository_dispatch:
+    types:
+      - update_main_branch
 
+jobs:
+  update_main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
 
+      - name: Merge main branch
+        run: git merge ${{ github.event.client_payload.pull_request.head.ref }}
